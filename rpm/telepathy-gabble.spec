@@ -88,7 +88,9 @@ cd ../../..
 
 make %{?jobs:-j%jobs}
 
-
+# >> build post
+tests/mktests.sh > tests/tests.xml
+# << build post
 
 %install
 rm -rf %{buildroot}
