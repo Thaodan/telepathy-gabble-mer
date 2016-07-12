@@ -11,6 +11,7 @@ Source1:    INSIGNIFICANT
 Source2:    mktests.sh
 Patch0:     nemo-tests-dir-fix.patch
 Patch1:     0001-Disable-parallel-build-for-extensions-directory.patch
+Patch2:     wocky-disable-gtkdoc.patch
 Patch4:     0001-Change-default-keepalive-interval-to-2.5-minutes.patch
 Requires:   telepathy-mission-control
 Requires(post): /sbin/ldconfig
@@ -64,6 +65,8 @@ tests.xml for automated testing.
 %patch1 -p1
 # 0001-Change-default-keepalive-interval-to-2.5-minutes.patch
 %patch4 -p1
+cd lib/ext/wocky
+%patch2 -p1
 
 # >> setup
 %__cp $RPM_SOURCE_DIR/mktests.sh tests/
