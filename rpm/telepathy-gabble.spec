@@ -42,24 +42,12 @@ A Jabber/XMPP connection manager, that handles single and multi-user
 chats and voice calls.
 
 
-%package tests
-Summary:    Tests package for %{name}
-Group:      Development/Libraries
-Requires:   %{name} = %{version}-%{release}
-Requires:   python-twisted
-Requires:   pyOpenSSL
-Requires:   dbus-python
-Requires:   pygobject2
 
-%description tests
-The %{name}-tests package contains tests and
-tests.xml for automated testing.
 
 
 %prep
 %setup -q -n %{name}-%{version}/%{name}
 
-# nemo-tests-dir-fix.patch
 %patch0 -p1
 # 0001-Disable-parallel-build-for-extensions-directory.patch
 %patch1 -p1
@@ -68,12 +56,7 @@ tests.xml for automated testing.
 cd lib/ext/wocky
 %patch2 -p1
 
-# >> setup
-%__cp $RPM_SOURCE_DIR/mktests.sh tests/
-%__cp $RPM_SOURCE_DIR/INSIGNIFICANT tests/
-%__chmod 0755 tests/mktests.sh
-%__chmod 0644 tests/INSIGNIFICANT
-# << setup
+
 
 %build
 # >> build pre
@@ -84,13 +67,9 @@ cd ../../..
 # << build pre
 
 %reconfigure --disable-static \
-    --enable-installed-tests
+    --disable-installed-tests
 
 make %{?jobs:-j%jobs}
-
-# >> build post
-tests/mktests.sh > tests/tests.xml
-# << build post
 
 %install
 rm -rf %{buildroot}
@@ -98,11 +77,7 @@ rm -rf %{buildroot}
 # << install pre
 %make_install
 
-# >> install post
-install -m 0644 tests/tests.xml $RPM_BUILD_ROOT/opt/tests/telepathy-gabble/tests.xml
-install -m 0644 tests/INSIGNIFICANT $RPM_BUILD_ROOT/opt/tests/telepathy-gabble/INSIGNIFICANT
-install -m 0644 tests/README $RPM_BUILD_ROOT/opt/tests/telepathy-gabble/README
-# << install post
+
 
 %post -p /sbin/ldconfig
 
@@ -125,8 +100,4 @@ install -m 0644 tests/README $RPM_BUILD_ROOT/opt/tests/telepathy-gabble/README
 %{_mandir}/man8/%{name}.8.gz
 # << files
 
-%files tests
-%defattr(-,root,root,-)
-/opt/tests/%{name}/*
-# >> files tests
-# << files tests
+
